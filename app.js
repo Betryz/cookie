@@ -1,13 +1,21 @@
-// app.js
-var express = require('express');
-var app = express();
+const express = require('express');
+const { configureCookieParser } = require('./cookie');
+const userRouter = require('./user'); 
+const cookieRouter = require('./cookieRoutes'); // Corrigido para o arquivo correto
 
-var userRouter = require('./user'); // Importa o arquivo users.js
+const app = express();
+
+// Configura o middleware cookie-parser com a chave secreta
+const COOKIE_SECRET = 'sua_chave_secreta';
+configureCookieParser(app, COOKIE_SECRET);
 
 app.use(express.json()); // Middleware para interpretar JSON
 
-// Use as rotas definidas no users.js
+// Usa as rotas definidas em user.js
 app.use('/user', userRouter);
+
+// Usa as rotas definidas em cookieRoutes.js
+app.use('/cookies', cookieRouter);
 
 app.listen(3000, () => {
   console.log('Servidor rodando na porta 3000');
